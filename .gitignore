@@ -38,9 +38,7 @@ env/
 # data/raw/*.csv
 # models/*.pkl
 
-# Jupyter Notebook
-.ipynb_checkpoints/
-*.ipynb
+
 
 # Environment variables
 .env
