@@ -1,0 +1,7 @@
+FLOOD PREDICTION MODEL - EVALUATION REPORT
+==================================================
+
+accuracy: 1.0000
+precision: 1.0000
+recall: 1.0000
+f1: 1.0000
