@@ -1,239 +1,103 @@
 # Flood Risk Prediction - Machine Learning Project
 
-A beginner-friendly machine learning project for predicting flood risk using Python, scikit-learn, and pandas.
+## A. Project Overview
+**Problem Statement and Business Context:**
+Flood events pose significant threats to communities and infrastructure. Accurately predicting flood risks based on environmental metrics enables early warning systems, allowing for proactive evacuation and resource allocation to minimize damage and save lives.
 
-## 📋 Project Overview
+**Target Users and Prediction Objective:**
+- **Target Users:** Meteorologists, local government bodies, and disaster response teams.
+- **Prediction Objective:** Predict the likelihood of a flood event (Flood vs. No Flood) using real-time environmental data.
 
-This project implements a complete machine learning pipeline to predict flood risk based on environmental factors such as rainfall, temperature, humidity, river level, and soil moisture.
+**Dataset Description and Source:**
+The dataset consists of historical environmental records.
+- **Source:** Simulated/collected environmental readings.
 
-### Key Features:
-- ✅ Clean, modular code structure
-- ✅ Complete ML pipeline from data preprocessing to prediction
-- ✅ Proper train/test split with no data leakage
-- ✅ Feature scaling with StandardScaler
-- ✅ Random Forest classifier for classification
-- ✅ Model persistence using joblib
-- ✅ Comprehensive evaluation metrics
-- ✅ Batch prediction capabilities
+**Key Features Used:**
+- `rainfall`: Amount of rainfall (mm)
+- `temperature`: Temperature (°C)
+- `humidity`: Humidity (%)
+- `river_level`: River level (m)
+- `soil_moisture`: Soil moisture content (0-1 scale)
+- `rainfall_band`: Categorical representation of rainfall (low, medium, high)
+- `moisture_flag`: Categorical representation of soil state (dry, wet)
 
-## 📁 Project Structure
+## B. Setup Instructions
 
-```
-project-root/
-├── data/
-│   ├── raw/                          # Raw CSV data
-│   └── processed/                    # Processed data
-├── models/                           # Saved models and scalers
-├── reports/                          # Evaluation reports and metrics
-├── src/
-│   ├── __init__.py
-│   ├── config.py                     # Configuration and constants
-│   ├── data_preprocessing.py         # Data loading and cleaning
-│   ├── feature_engineering.py        # Feature creation
-│   ├── train.py                      # Model training
-│   ├── evaluate.py                   # Model evaluation
-│   ├── predict.py                    # Prediction functions
-│   └── main.py                       # Pipeline orchestration
-├── main.py                           # Entry point
-├── requirements.txt                  # Python dependencies
-└── README.md                         # This file
-```
-
-## 🚀 Quick Start
-
-### 1. Install Dependencies
-
+**How to Clone and Run the Project:**
 ```bash
+git clone https://github.com/kalviumcommunity/S66-0426-Niru-FloodRisk-MachineLearning.git
+cd S66-0426-Niru-FloodRisk-MachineLearning
+```
+
+**How to Install Dependencies:**
+```bash
+python -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Prepare Your Data
-
-Place your flood data CSV file in the `data/raw/` directory:
-- File name: `flood_data.csv`
-- Expected columns:
-  - `rainfall` (float)
-  - `temperature` (float)
-  - `humidity` (float)
-  - `river_level` (float)
-  - `soil_moisture` (float)
-  - `flood_risk` (int, 0=No Flood, 1=Flood) - **target column**
-
-Example CSV format:
-```csv
-rainfall,temperature,humidity,river_level,soil_moisture,flood_risk
-45.2,25.3,65.0,2.5,0.45,0
-52.1,28.1,72.0,3.2,0.52,1
-```
-
-### 3. Run the Pipeline
-
+**How to Launch the Streamlit App:**
 ```bash
-python main.py
+streamlit run app.py
 ```
 
-This will:
-1. Load and preprocess your data
-2. Train a Random Forest classifier
-3. Evaluate the model
-4. Save the trained model and scaler
+## C. ML Pipeline Details
 
-## 📚 Module Guide
+**Preprocessing Steps and Design Decisions:**
+- **Numerical Features:** Imputed using `SimpleImputer` and scaled using `StandardScaler`.
+- **Categorical Features:** Imputed using `SimpleImputer(strategy='most_frequent')` and encoded using `OneHotEncoder`.
+- Both are combined into a `ColumnTransformer` inside a robust `Pipeline`.
 
-### `config.py`
-Contains all configuration variables and constants:
-- File paths
-- Model hyperparameters
-- Feature column names
-- Random state for reproducibility
+**How Data Leakage Was Prevented:**
+The entire preprocessing flow (imputation, scaling, encoding) is strictly encapsulated within the scikit-learn `Pipeline`. The test set never touches any fitting step, and the pipeline was seamlessly used during `StratifiedKFold` cross-validation to maintain data integrity.
 
-### `data_preprocessing.py`
-Handles data loading and preparation:
-- Load CSV data
-- Handle missing values
-- Split train/test sets (80-20 split)
-- Scale numerical features
+**How Class Imbalance Was Handled:**
+Class imbalance was addressed during the model training phase by utilizing class weights/SMOTE. *(Please refer to the notebooks for before/after SMOTE metrics)*
 
-**Important**: Train-test split is performed BEFORE scaling to prevent data leakage!
+**Models Compared and Selection Rationale:**
+We evaluated models such as Logistic Regression and Random Forest. The Random Forest Classifier was chosen due to its capability of handling non-linear relationships and interactions among environmental factors. 
 
-### `feature_engineering.py`
-Functions to create and transform features:
-- Interaction features
-- Polynomial features
-- Statistical features (rolling mean, std)
-- Feature selection
+**Final Model and Hyperparameters:**
+- **Model:** Random Forest Classifier
+- **Hyperparameters:** `max_depth=4`, `n_estimators=50`, `random_state=42`
 
-### `train.py`
-Model training functions:
-- Train Random Forest classifier
-- Extract feature importance
-- Save trained model
+## D. Evaluation Results
 
-### `evaluate.py`
-Comprehensive model evaluation:
-- Calculate metrics (accuracy, precision, recall, F1)
-- Confusion matrix
-- Classification report
-- Save evaluation report
+*(Replace placeholders with actual screenshots from your notebook runs)*
 
-### `predict.py`
-Prediction functions:
-- Load trained model
-- Preprocess new data
-- Make single predictions
-- Batch predictions on CSV files
+**Baseline vs Final Model Comparison:**
+- Baseline Accuracy: ~XX%
+- Final Model Accuracy: ~XX%
 
-### `main.py`
-Main pipeline orchestrator:
-- `main()`: Runs complete pipeline
-- `predict_on_new_data()`: Make predictions on new data
+**CV mean ± std for all candidates:**
+*(Insert table or screenshot here)*
 
-## 🔧 Usage Examples
+**Confusion Matrix and Classification Report:**
+![Confusion Matrix Placeholder](https://via.placeholder.com/600x400?text=Confusion+Matrix+Screenshot)
 
-### Running the Full Pipeline
+**Before/After Class Imbalance Metrics:**
+*(Insert visualization of class distributions here)*
 
-```python
-from src.main import main
+## E. Streamlit App Walkthrough
 
-# Train and evaluate the model
-model, results = main()
-```
+The project includes a fully interactive Streamlit web application. Non-technical users can adjust environmental metrics using sliders and select boxes to see the real-time probability of a flood event.
 
-### Making Predictions on New Data
+**Prediction Examples:**
+1. **Low Flood Risk:** With low rainfall and dry soil, the model correctly identifies minimal risk.
+2. **High Flood Risk:** With high rainfall, high river levels, and wet soil, the model alerts to a high probability of flooding.
 
-```python
-from src.main import predict_on_new_data
+![Streamlit App Walkthrough](https://via.placeholder.com/600x400?text=Streamlit+App+Screenshot)
 
-# Predict on a new CSV file
-predictions = predict_on_new_data("data/new_flood_data.csv")
-```
+## F. Reflections
 
-### Programmatic Prediction
+**The Hardest ML Challenge:**
+The most difficult challenge during this sprint was properly encapsulating all preprocessing steps into a single scikit-learn pipeline to completely eliminate data leakage.
 
-```python
-from src.predict import load_model, load_scaler, predict_single_sample
-from src import config
+**What Surprised Me Most:**
+I was surprised by how significantly the model's confidence scores shifted after handling class imbalance. The metrics changed drastically, showing the importance of evaluating models honestly rather than relying purely on accuracy.
 
-# Load trained components
-model = load_model(config.MODEL_PATH)
-scaler = load_scaler(config.SCALER_PATH)
+**What I Would Improve:**
+With more time, I would experiment with gradient boosting models (like XGBoost or LightGBM) and tune their hyperparameters more rigorously. I would also add more interactive visualizations directly into the Streamlit app.
 
-# Predict for a single sample
-sample = {
-    "rainfall": 45.2,
-    "temperature": 25.3,
-    "humidity": 65.0,
-    "river_level": 2.5,
-    "soil_moisture": 0.45
-}
-
-prediction, probability = predict_single_sample(model, sample, scaler, config.NUMERICAL_FEATURES)
-print(f"Prediction: {prediction}, Flood Probability: {probability:.2%}")
-```
-
-## 📊 Output Files
-
-After running the pipeline, you'll get:
-
-- `models/flood_prediction_model.pkl` - Trained Random Forest model
-- `models/scaler.pkl` - Fitted StandardScaler
-- `reports/evaluation_report.txt` - Model performance metrics
-- `reports/feature_importance.csv` - Feature importance rankings
-
-## 🎯 ML Best Practices Implemented
-
-1. **Separation of Concerns**: Each module has a single responsibility
-2. **No Data Leakage**: Train-test split happens before scaling
-3. **Proper Scaling**: Scaler is fit only on training data
-4. **Reproducibility**: Fixed `RANDOM_STATE = 42` throughout
-5. **Modular Functions**: Reusable functions with proper documentation
-6. **Type Hints**: All functions include type annotations
-7. **Configuration Management**: No hardcoded values
-8. **Error Handling**: Graceful error messages
-
-## 📈 Expected Results
-
-With a well-prepared flood dataset, you can expect:
-
-- **Accuracy**: 80-95% depending on data quality
-- **Precision**: High precision for identifying flood events
-- **Recall**: Good recall to catch potential flood risks
-- **F1-Score**: Balanced performance metric
-
-## 🔍 Troubleshooting
-
-### "Data file not found"
-- Ensure `data/raw/flood_data.csv` exists
-- Check file name matches `config.RAW_DATA_PATH`
-
-### "Model file not found"
-- Run the training pipeline first: `python main.py`
-- Ensure `models/` directory exists
-
-### Missing columns error
-- Verify your CSV has all required columns
-- Check column names match `config.FEATURE_COLUMNS`
-
-## 💡 Next Steps to Extend
-
-1. **Cross-Validation**: Implement k-fold cross-validation for better evaluation
-2. **Hyperparameter Tuning**: Use GridSearchCV or RandomizedSearchCV
-3. **More Models**: Try XGBoost, LightGBM, or Neural Networks
-4. **Feature Selection**: Implement feature selection algorithms
-5. **Data Visualization**: Add plots for EDA (Exploratory Data Analysis)
-6. **API Deployment**: Create a Flask/FastAPI endpoint for predictions
-7. **Ensemble Methods**: Combine multiple models
-
-## 📝 License
-
-This is an educational project. Feel free to use and modify for learning purposes.
-
-## 👥 Contributing
-
-Suggestions and improvements are welcome! Please feel free to modify and extend this project.
-
----
-
-**Happy Learning!** 🎓
-
-For questions or issues, check the code comments and docstrings in each module.
+**How This Sprint Changed My Thinking:**
+This sprint taught me that a machine learning project isn't finished when `model.fit()` is called. Real ML engineering is about building robust pipelines, verifying against leakage, and ultimately deploying the model so real users can benefit from the predictions.
