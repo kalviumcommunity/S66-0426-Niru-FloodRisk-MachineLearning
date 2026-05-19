@@ -1,0 +1,7 @@
+{
+  "python_version": "3.14.4 (main, Apr  7 2026, 13:13:20) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "sklearn_version": "1.8.0",
+  "numpy_version": "2.4.4",
+  "trained_on": "2026-05-19",
+  "model_description": "Flood risk pipeline notebook serialization demo"
+}
